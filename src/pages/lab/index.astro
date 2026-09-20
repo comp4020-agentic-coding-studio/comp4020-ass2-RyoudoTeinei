@@ -1,0 +1,81 @@
+---
+import CoursePage from "../../layouts/CoursePage.astro";
+import { withBase } from "astro-theme-university/url";
+import { scenarios } from "../../lib/exit-lab";
+---
+<CoursePage title="Practise your way out." description="A receipt, a decision and a result you can verify. Work through a fictional case before dealing with a real account." eyebrow="EXIT LAB / UNGRADED PRACTICE">
+  <div class="lab-intro"><p>All accounts and transactions here are simulated. Choose a case, read the evidence and follow the outcome. Nothing connects to a provider.</p><a class="text-link" href={withBase("/resources/#practice-pack")}>Prefer the text worksheets? ↗</a></div>
+  <div class="lab-scenarios" id="lab-scenarios">{scenarios.map((scenario)=><article class="scenario-card"><span class="micro">{scenario.category}</span><h2>{scenario.title}</h2><p>{scenario.description}</p><button class="button button-dark" type="button" data-start={scenario.id}>Work this case <span aria-hidden="true">↗</span></button></article>)}</div>
+  <section class="lab-shell" id="lab-shell" hidden aria-label="Practice case">
+    <div class="lab-toolbar"><span class="micro">FICTIONAL ACCOUNT / NO REAL TRANSACTION</span><button class="text-link" type="button" data-action="reset">Choose another case ↗</button></div>
+    <ol class="lab-progress" id="lab-progress" aria-label="Practice progress"></ol>
+    <div class="lab-workspace"><aside class="lab-receipt" id="lab-receipt" aria-label="Your practice receipt"></aside><div class="lab-stage"><div id="lab-stage-content"></div><p class="lab-feedback" id="lab-feedback" aria-live="polite" hidden></p></div></div>
+  </section>
+  <noscript><p>The interactive lab needs JavaScript. The <a href={withBase("/resources/#dossiers")}>complete text dossiers</a> provide an alternative way to practise every core skill.</p></noscript>
+</CoursePage>
+<script>
+  import { scenarios, initialState, transition, completionRecord, type Scenario, type LabState } from "../../lib/exit-lab";
+  const picker=document.querySelector<HTMLElement>("#lab-scenarios")!;
+  const shell=document.querySelector<HTMLElement>("#lab-shell")!;
+  const receipt=document.querySelector<HTMLElement>("#lab-receipt")!;
+  const content=document.querySelector<HTMLElement>("#lab-stage-content")!;
+  const progress=document.querySelector<HTMLElement>("#lab-progress")!;
+  const feedback=document.querySelector<HTMLElement>("#lab-feedback")!;
+  let scenario:Scenario=scenarios[0];
+  let state:LabState=initialState();
+  let timer:ReturnType<typeof setTimeout> | undefined;
+  const base=import.meta.env.BASE_URL;
+  const escape=(value:string)=>value.replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
+  const button=(label:string,action:string,kind="dark")=>'<button type="button" class="button button-'+kind+'" data-action="'+action+'">'+label+'</button>';
+  function render(focus=true){
+    const step=state.stage==="route"?0:state.stage==="terms"?1:state.stage==="ready"?2:3;
+    progress.innerHTML=["01 / BILLER","02 / TERMS","03 / REQUEST","04 / EVIDENCE"].map((label,i)=>'<li'+(i===step?' aria-current="step"':'')+'>'+label+'</li>').join("");
+    feedback.hidden=!state.feedback;
+    feedback.textContent=state.feedback;
+    if(state.stage==="route"){
+      const routes=[["apple","Apple subscriptions"],["google","Google Play subscriptions"],["direct","The service provider directly"],["partner","The named bundle / payment partner"]];
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">Who controls this purchase?</h2><p>Read the biller on your practice receipt, then choose the management route.</p><form data-question="route"><fieldset class="lab-options"><legend>Where would you go?</legend>'+routes.map(([value,label])=>'<label class="lab-option"><input required type="radio" name="answer" value="'+value+'"><span>'+label+'</span></label>').join("")+'</fieldset><button class="button button-dark" type="submit">Check this route →</button></form>';
+    }else if(state.stage==="terms"){
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">What are you agreeing to?</h2><p>'+escape(scenario.rule)+'</p><form data-question="terms"><fieldset class="lab-options"><legend>Which action matches the goal?</legend>'+scenario.choices.map((choice)=>'<label class="lab-option"><input required type="radio" name="answer" value="'+choice.value+'"><span>'+escape(choice.label)+'</span></label>').join("")+'</fieldset><button class="button button-dark" type="submit">Check this decision →</button></form>';
+    }else if(state.stage==="ready"){
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">Read the final details.</h2><p>You are acting on <strong>'+escape(scenario.service)+'</strong>, billed by '+escape(scenario.biller)+'.</p><div class="lab-result"><p>'+escape(scenario.outcome)+'</p><p>Paid access ends <strong>'+escape(scenario.endDate)+'</strong>.</p></div><p>This button sends a simulated request. We will still need to establish its result.</p>'+button("Confirm the practice request →","request");
+    }else if(state.stage==="pending"){
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">Request sent. Waiting…</h2><p class="lab-status" role="status">SIMULATED REQUEST IN PROGRESS</p><p>The account has not returned a result yet.</p>';
+    }else if(state.stage==="uncertain"){
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">The request timed out.</h2><p>The connection stopped before a confirmation appeared. What do you know about the resulting subscription state?</p><div class="actions">'+button("Check the account status →","verify")+button("Assume it worked","assume","outline")+'</div>';
+    }else{
+      content.innerHTML='<h2 tabindex="-1" id="lab-stage-title">Now you have the evidence.</h2><p>The fictional account record confirms the outcome for this particular plan.</p><div class="lab-result"><p class="lab-status">SIMULATED ACCOUNT RECORD</p><dl><dt>Plan</dt><dd>'+escape(scenario.service)+'</dd><dt>Renewal</dt><dd>Off</dd><dt>Access ends</dt><dd>'+escape(scenario.endDate)+'</dd><dt>Confirmation</dt><dd>'+escape(scenario.confirmation)+'</dd></dl><p>'+escape(scenario.outcome)+'</p></div><p><strong>What mattered:</strong> the receipt chose the route, the terms informed the decision, and the account record established the result. The timeout alone did not.</p><div class="actions">'+button("Save practice record ↓","save")+button("Try another case ↗","reset","outline")+'</div><p class="page-end-link"><a href="'+base+'lectures/'+scenario.lesson+'/">Read the related case lesson →</a></p>';
+    }
+    if(focus) document.querySelector<HTMLElement>("#lab-stage-title")?.focus({preventScroll:true});
+  }
+  function start(id:string){
+    const found=scenarios.find((item)=>item.id===id); if(!found) return;
+    clearTimeout(timer);scenario=found;state=initialState();
+    picker.hidden=true;shell.hidden=false;
+    receipt.innerHTML='<span class="micro">YOUR PRACTICE RECEIPT</span><h2>'+escape(scenario.service)+'</h2><dl><dt>Biller</dt><dd>'+escape(scenario.biller)+'</dd><dt>Account alias</dt><dd>'+escape(scenario.account)+'</dd><dt>Payment</dt><dd>'+escape(scenario.price)+'</dd><dt>Commitment</dt><dd>'+escape(scenario.commitment)+'</dd></dl><p class="scope-note"><strong>Your goal:</strong> '+escape(scenario.goal)+'</p>';
+    render();shell.scrollIntoView({block:"start",behavior:"instant"});
+  }
+  picker.addEventListener("click",(event)=>{const target=(event.target as HTMLElement).closest<HTMLButtonElement>("[data-start]");if(target)start(target.dataset.start!);});
+  shell.addEventListener("submit",(event)=>{
+    event.preventDefault();const form=event.target as HTMLFormElement;
+    if(!form.reportValidity())return;
+    const value=String(new FormData(form).get("answer"));
+    state=transition(state,{type:form.dataset.question==="route"?"ROUTE":"TERMS",value},scenario);
+    render();
+  });
+  shell.addEventListener("click",(event)=>{
+    const target=(event.target as HTMLElement).closest<HTMLButtonElement>("[data-action]");if(!target)return;
+    const action=target.dataset.action;
+    if(action==="reset"){clearTimeout(timer);state=initialState();shell.hidden=true;picker.hidden=false;picker.querySelector<HTMLButtonElement>("[data-start]")?.focus();return;}
+    if(action==="save"){
+      const record=completionRecord(scenario,state);if(!record)return;
+      const url=URL.createObjectURL(new Blob([record],{type:"text/plain;charset=utf-8"}));
+      const link=document.createElement("a");link.href=url;link.download="how-to-leave-"+scenario.id+"-practice.txt";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return;
+    }
+    if(action==="request"){
+      state=transition(state,{type:"REQUEST"},scenario);render();
+      timer=setTimeout(()=>{state=transition(state,{type:"TIMEOUT"},scenario);render();},800);return;
+    }
+    state=transition(state,{type:action==="verify"?"VERIFY":"ASSUME"},scenario);render();
+  });
+</script>

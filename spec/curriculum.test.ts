@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
-type CourseNode = { id: string; type: string; body?: string; meta: Record<string, unknown> };
+type CourseNode = { id: string; type: string; related?: string[]; meta: Record<string, unknown> };
 const api = JSON.parse(readFileSync(resolve("dist/api/index.json"), "utf8")) as {
   course: { code: string; title: string };
   nodes: CourseNode[];
@@ -33,7 +33,8 @@ describe("the course promised to a prospective student", () => {
     for (const node of ofType("lectures")) {
       expect(Array.isArray(node.meta.outcomes), node.id).toBe(true);
       expect((node.meta.outcomes as string[]).length, node.id).toBeGreaterThanOrEqual(2);
-      expect(node.body?.length, node.id).toBeGreaterThan(500);
+      const workshop = "sessions/week-" + String(node.meta.week).padStart(2, "0");
+      expect(node.related, node.id).toContain(workshop);
     }
   });
   it("attaches source scope to all five real-platform case lessons", () => {

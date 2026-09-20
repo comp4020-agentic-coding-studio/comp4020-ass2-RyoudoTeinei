@@ -1,0 +1,12 @@
+---
+import { getPublishedCollection } from "astro-course-university/content";
+import { withBase } from "astro-theme-university/url";
+import CoursePage from "../../layouts/CoursePage.astro";
+import { formatCourseDate } from "../../lib/dates";
+const lectures=(await getPublishedCollection("lectures")).sort((a,b)=>a.data.week-b.data.week);
+---
+<CoursePage title="Twelve weeks. A way out." description="Start with the receipt. Work through real platform cases. Finish knowing how to handle an unfamiliar subscription." eyebrow="THE LEARNING PATH">
+  <div class="schedule-note"><span>01–03 / FIND YOUR FOOTING</span><span>04–08 / WORK THE CASES</span><span>09–12 / LEAVE WITH CONFIDENCE</span></div>
+  <div class="week-list">{lectures.map((lecture)=><><a class="week-row" href={withBase("/lectures/"+lecture.id+"/")}><span class="week-number">{String(lecture.data.week).padStart(2,"0")}</span><div><span class="micro">{lecture.data.caseStudy ? "CASE FILE / "+String(lecture.data.caseStudy) : String(lecture.data.phase).toUpperCase()}</span><h2>{lecture.data.title}</h2><p>{lecture.data.description}</p></div><span class="week-date">{formatCourseDate(lecture.data.date)}</span><span class="week-arrow" aria-hidden="true">↗</span></a>{lecture.data.week===6 && <p class="semester-break">PAUSE HERE / Mid-semester break · 7–20 September</p>}</>)}</div>
+  <p class="page-end-link"><a href={withBase("/sessions/")}>Open the workshop schedule <span aria-hidden="true">→</span></a></p>
+</CoursePage>

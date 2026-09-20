@@ -1,0 +1,6 @@
+---
+import { getTeachingSources } from "../data/sources";
+interface Props { ids?: unknown; }
+const entries=getTeachingSources(Astro.props.ids);
+---
+<aside class="source-notes" aria-label="Sources for this lesson"><p class="eyebrow">READ THE ORIGINAL</p><h2>Keep the source<br />in sight.</h2>{entries.map((source)=><div class="source-entry"><span class="micro">{source.publisher}</span><a href={source.url} target="_blank" rel="noreferrer">{source.title} <span aria-hidden="true">↗</span></a><p>{source.scope}</p><span class="checked-date">SOURCE CHECKED {source.checked}</span></div>)}</aside>

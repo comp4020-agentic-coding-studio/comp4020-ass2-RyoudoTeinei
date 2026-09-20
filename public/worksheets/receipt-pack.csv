@@ -1,0 +1,5 @@
+record_id,service,biller,account_alias,amount,currency,payment_frequency,commitment,next_date,evidence
+R01,STAY+,Apple,NORTH,12,AUD,monthly,monthly,2026-10-08,Fictional receipt plus plan card
+R02,Mosaic Studio,Mosaic direct,NORTH,20,practice units,monthly,annual,2026-10-15,Fictional card: 6 payments remain; exit charge is half the remaining balance
+R03,Focus Paper,Google Play,SOUTH,8,AUD,monthly,monthly,2026-10-08,Fictional receipt plus active-renewal status
+R04,Notebook purchase,Campus Shop,NORTH,18,AUD,one-off,none,,Fictional retail receipt

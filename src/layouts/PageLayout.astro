@@ -1,8 +1,7 @@
 ---
-import MdxPageLayout from "astro-theme-university/layouts/MdxPageLayout.astro";
-import { siteConfig } from "../site-config";
+import CoursePage from "./CoursePage.astro";
+const meta = Astro.props.frontmatter ?? Astro.props;
 ---
-
-<MdxPageLayout siteConfig={siteConfig} {...Astro.props}>
+<CoursePage title={String(meta.title ?? "How to Leave")} description={meta.description} eyebrow="Course handbook">
   <slot />
-</MdxPageLayout>
+</CoursePage>

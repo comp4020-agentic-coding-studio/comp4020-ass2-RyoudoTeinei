@@ -1,0 +1,14 @@
+---
+import BaseLayout from "astro-theme-university/layouts/BaseLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import { siteConfig } from "../site-config";
+import { courseMeta } from "../course-config";
+import "../styles/course.css";
+interface Props { title: string; description?: string | null; eyebrow?: string; }
+const { title,description,eyebrow="THE COURSE" }=Astro.props;
+---
+<BaseLayout title={title + " — " + courseMeta.title} description={description ?? undefined} {...siteConfig} clientRouter={false} legalLinks={siteConfig.legalLinks?.map((link) => ({ ...link, href: withBase(link.href) }))}>
+  <div class="course-breadcrumb"><a href={withBase("/")}>{courseMeta.code} / HOW TO LEAVE</a><span aria-hidden="true">↗</span><span>{courseMeta.session} {courseMeta.year}</span></div>
+  <header class="page-heading"><p class="eyebrow">{eyebrow}</p><h1>{title}</h1>{description && <p class="page-description">{description}</p>}</header>
+  <div class="course-content"><slot /></div>
+</BaseLayout>

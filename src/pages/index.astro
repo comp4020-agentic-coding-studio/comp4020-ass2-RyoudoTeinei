@@ -1,68 +1,55 @@
 ---
-import Card from "astro-theme-university/components/Card.astro";
-import CardGrid from "astro-theme-university/components/CardGrid.astro";
-import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
-import heroImage from "../assets/images/hero-home.avif";
+import BaseLayout from "astro-theme-university/layouts/BaseLayout.astro";
+import { withBase } from "astro-theme-university/url";
+import { getPublishedCollection } from "astro-course-university/content";
 import { courseMeta } from "../course-config";
-import { sessionLabels, siteConfig } from "../site-config";
-
-// STARTER_CONTENT: replace the hero artwork and its alt text below, then
-// remove this comment.
+import { siteConfig } from "../site-config";
+import "../styles/course.css";
+const lectures = (await getPublishedCollection("lectures")).sort((a,b) => a.data.week - b.data.week);
+const cases = lectures.filter((entry) => entry.data.caseStudy);
 ---
-
-<ContentLayout
-  title={`${courseMeta.code}: ${courseMeta.title}`}
-  description={courseMeta.description}
-  heroImage={heroImage}
-  heroImageAlt="A lecture theatre reduced to flat gold and black shapes, rows of seats sweeping past the frame, in a two-ink risograph print"
-  {...siteConfig}
->
-  <ul class="course-tags" aria-label="Course tags">
-    {courseMeta.tags.map((tag) => <li>{tag}</li>)}
-  </ul>
-
-  <!-- STARTER_CONTENT: replace the authored page below, then remove this comment. -->
-  <h2>What you will do</h2>
-  <p>
-    Say what a student spends their time on — the making, reading, arguing or
-    measuring that fills the weeks. Name the artefact they walk out with.
-  </p>
-
-  <h2>Who it is for</h2>
-  <p>
-    Say who this is aimed at and what they need to already know. Be specific
-    enough that someone can rule themselves in or out without emailing you.
-  </p>
-
-  <h2>Where to go next</h2>
-  <CardGrid columns={2}>
-    <Card title={sessionLabels.plural} href="/sessions/">
-      <p>The weekly schedule and what happens in each teaching session.</p>
-    </Card>
-    <Card title="Assessment" href="/assessments/">
-      <p>What is marked, what it is worth, and when it is due.</p>
-    </Card>
-    <Card title="People" href="/people/">
-      <p>Who teaches the course and how to reach them.</p>
-    </Card>
-  </CardGrid>
-</ContentLayout>
-
-<style>
-  .course-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-block: 0 2rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  .course-tags li {
-    padding: 0.25rem 0.65rem;
-    border-radius: 999px;
-    color: var(--at-text-secondary);
-    background: var(--at-bg-alt);
-    font-size: 0.9rem;
-  }
-</style>
+<BaseLayout title={courseMeta.title + " — " + courseMeta.code} description={courseMeta.description} {...siteConfig} clientRouter={false} legalLinks={siteConfig.legalLinks?.map((link) => ({ ...link, href: withBase(link.href) }))}>
+  <section class="home-hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="tiny-square"></span> {courseMeta.code} / EVERYDAY INDEPENDENCE</p>
+      <h1 id="hero-title">HOW TO<br /><span class="leave-word">LEAVE<span class="hero-period">.</span></span></h1>
+      <p class="hero-tagline">You shouldn’t need a degree to cancel.<br /><strong>We made one anyway.</strong></p>
+      <p class="hero-description">Find the biller. Read the small print. Finish the cancellation.<br class="desktop-break" /> A practical course for anyone who has ever paid to forget.</p>
+      <div class="actions"><a class="button button-dark" href={withBase("/lectures/")}>Explore the course <span aria-hidden="true">↗</span></a><a class="text-link" href={withBase("/lab/")}>Try a practice exit <span aria-hidden="true">→</span></a></div>
+      <p class="hero-footnote">{courseMeta.session.toUpperCase()} {courseMeta.year} <span> / </span> NO CODING REQUIRED</p>
+    </div>
+    <div class="hero-art" aria-label="An illustrated practice receipt showing auto-renewal switched off" role="img">
+      <div class="art-grid"></div><span class="art-note">A SMALL ACT OF<br />FINANCIAL SELF-DEFENCE.</span>
+      <div class="receipt">
+        <div class="receipt-brand">STAY<span>+</span><small>FICTIONAL PRACTICE SERVICE</small></div>
+        <div class="receipt-rule"></div>
+        <div class="receipt-row"><span>YOUR PLAN</span><strong>Monthly</strong></div>
+        <div class="receipt-row"><span>THE BILLER</span><strong>Identified</strong></div>
+        <div class="receipt-row"><span>THE SMALL PRINT</span><strong>Read</strong></div>
+        <div class="receipt-rule"></div>
+        <p class="receipt-total"><span>NEXT CHAPTER</span><strong>Yours.</strong></p>
+        <div class="receipt-stamp">AUTO-RENEWAL<br /><b>OFF</b></div>
+        <div class="receipt-barcode" aria-hidden="true"></div>
+        <span class="receipt-code">KEEP THE CONFIRMATION.</span>
+      </div>
+      <span class="art-arrow" aria-hidden="true">↗</span>
+      <span class="art-caption">EXHIBIT 001 / A CLEAN EXIT</span>
+    </div>
+  </section>
+  <div class="course-strip"><span><b>12</b> teaching weeks</span><span><b>5</b> real-platform case lessons</span><span><b>3</b> practical assessments</span><span class="strip-last">One useful life skill. <span aria-hidden="true">↗</span></span></div>
+  <section class="home-section intro-section" aria-labelledby="intro-title">
+    <p class="eyebrow section-index">01 / THE POINT</p>
+    <div><h2 id="intro-title">Know what you’re paying for.<br /><em>Know how to stop.</em></h2><p>Some exits hide in the wrong account. Others sit behind an annual commitment or a very persuasive offer. Learn to work out which problem you have, choose the right route, and keep evidence of what happened.</p><a class="text-link" href={withBase("/guide/")}>What you will learn <span aria-hidden="true">→</span></a></div>
+  </section>
+  <section class="method-grid" aria-label="The course method">
+    <article><span class="method-number">01</span><h2>Follow the money.</h2><p>The receipt tells you who bills you. The app icon might not.</p><span class="micro">INVENTORY / ACCOUNT / CHANNEL</span></article>
+    <article><span class="method-number">02</span><h2>Read both clocks.</h2><p>When you pay and how long you committed are separate questions.</p><span class="micro">PAYMENT / COMMITMENT / TERMS</span></article>
+    <article><span class="method-number">03</span><h2>Keep the proof.</h2><p>A button press is an attempt. A verified result is your way out.</p><span class="micro">STATUS / DATES / CONFIRMATION</span></article>
+  </section>
+  <section class="home-section" aria-labelledby="cases-title">
+    <div class="section-heading"><div><p class="eyebrow">02 / REAL SERVICES, USEFUL LESSONS</p><h2 id="cases-title">Recognise any of these?</h2></div><a class="text-link" href={withBase("/lectures/")}>See all 12 weeks <span aria-hidden="true">↗</span></a></div>
+    <div class="case-grid">{cases.map((entry) => <a class="case-card" href={withBase("/lectures/" + entry.id + "/")}><span class="micro">WEEK {String(entry.data.week).padStart(2,"0")} / CASE FILE</span><span class="case-brand">{String(entry.data.caseStudy)}</span><h3>{entry.data.title}</h3><p>{entry.data.description}</p><span class="case-open">Open the lesson <span aria-hidden="true">↗</span></span></a>)}</div>
+  </section>
+  <section class="lab-banner" aria-labelledby="lab-title"><div><p class="eyebrow">03 / A LITTLE PRACTICE GOES A LONG WAY</p><h2 id="lab-title">A receipt. A decision.<br />A way out.</h2><p>Work through a fictional subscription. Find the right biller, read the terms and recognise a completed cancellation.</p><a class="button button-light" href={withBase("/lab/")}>Enter the Exit Lab <span aria-hidden="true">↗</span></a></div><div class="lab-banner-mark" aria-hidden="true"><span>EXIT</span><b>→</b></div></section>
+  <div class="home-end"><p>All practice uses fictional accounts.<br />Bring your curiosity. Keep your passwords.</p><a class="text-link" href={withBase("/resources/")}>Open the source register <span aria-hidden="true">↗</span></a></div>
+</BaseLayout>

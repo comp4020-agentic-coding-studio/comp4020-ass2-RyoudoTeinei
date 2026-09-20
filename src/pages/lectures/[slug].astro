@@ -1,27 +1,27 @@
 ---
 import { render } from "astro:content";
 import { getPublishedCollection } from "astro-course-university/content";
-import RelatedContent from "astro-course-university/components/RelatedContent.astro";
-import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { withBase } from "astro-theme-university/url";
-import TeachingTeam from "../../components/TeachingTeam.astro";
+import CoursePage from "../../layouts/CoursePage.astro";
+import SourceNotes from "../../components/SourceNotes.astro";
 import { formatCourseDate } from "../../lib/dates";
-import { graphCollections, siteConfig } from "../../site-config";
-
 export async function getStaticPaths() {
-  const lectures = await getPublishedCollection("lectures");
-  return lectures.map((lecture) => ({ params: { slug: lecture.id }, props: { lecture } }));
+  return (await getPublishedCollection("lectures")).map((lecture) => ({params:{slug:lecture.id},props:{lecture}}));
 }
-
 const { lecture } = Astro.props;
 const { Content } = await render(lecture);
-const title = `Week ${lecture.data.week}: ${lecture.data.title}`;
+const all = (await getPublishedCollection("lectures")).sort((a,b) => a.data.week-b.data.week);
+const next = all.find((entry) => entry.data.week === lecture.data.week+1);
+const outcomes = Array.isArray(lecture.data.outcomes) ? lecture.data.outcomes as string[] : [];
+const sessionId = "week-" + String(lecture.data.week).padStart(2,"0");
 ---
-
-<ContentLayout title={title} description={lecture.data.description} {...siteConfig}>
-  <p><strong>{formatCourseDate(lecture.data.date)}</strong></p>
-  {lecture.data.slides && <p><a href={withBase(lecture.data.slides)}>Open the slides</a></p>}
-  <Content />
-  <TeachingTeam teachers={lecture.data.teachers} />
-  <RelatedContent entry={lecture} collections={graphCollections} />
-</ContentLayout>
+<CoursePage title={lecture.data.title} description={lecture.data.description} eyebrow={"WEEK " + String(lecture.data.week).padStart(2,"0") + " / " + String(lecture.data.phase)}>
+  <div class="detail-meta"><span>{formatCourseDate(lecture.data.date)}</span><span>45 MIN LECTURE + INDEPENDENT READING</span>{lecture.data.caseStudy && <span class="tag">REAL-PLATFORM CASE</span>}</div>
+  <div class="lesson-columns"><article class="prose">
+    <section class="outcomes"><h2>After this lesson</h2><ul>{outcomes.map((item) => <li>{item}</li>)}</ul></section>
+    {lecture.data.slides && <a class="deck-link" href={withBase(lecture.data.slides)}>Open the lecture slides <span aria-hidden="true">↗</span></a>}
+    {lecture.data.scope && <p class="scope-note"><strong>Case scope.</strong> {String(lecture.data.scope)}</p>}
+    <Content />
+    <div class="lesson-next"><a class="button button-dark" href={withBase("/sessions/" + sessionId + "/")}>Do the workshop <span aria-hidden="true">→</span></a>{next && <a class="text-link" href={withBase("/lectures/" + next.id + "/")}>Next: {next.data.title}</a>}</div>
+  </article><SourceNotes ids={lecture.data.sourceIds} /></div>
+</CoursePage>
