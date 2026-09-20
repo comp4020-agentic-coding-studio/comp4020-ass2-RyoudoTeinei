@@ -1,53 +1,19 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-Written by you, for a reader: how you got from the brief to the harness and
-agentic workflow behind this submission. Markers read this file and follow its
-citations; they don't trawl the repo for evidence you didn't point at.
-
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and its
-[word counts](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#word-counts)
-cover every deliverable.
+*Agent-assisted factual draft for the student's review. Amend the account to reflect your own judgement before submission.*
 
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+How to Leave is a twelve-week introductory course about cancelling subscriptions. It teaches everyday users to identify the biller, read the commitment, choose an appropriate route and verify the result. Five lessons use Apple, Google Play, Adobe and Netflix as sourced cases. Workshops, three assessments, a source register and an optional practice lab connect the lessons to concrete outputs. The site retains the provided SlopU identity, Astro platform, content collections and generated API.
 
-## How I got here
+## How the course took shape
 
-The account of the process: how the work actually went, and how you knew the
-result was right. Tell it in whatever order makes it clear. A weekly prototype
-needs a paragraph or two; an assignment needs more.
+The initial proposal approached cancellation as an interface-design problem. The student's direction shifted it towards teaching consumers how to act, with real platform examples. That changed both the audience and the work students submit. An inventory, a cancellation field guide and an unfamiliar-case response replaced interface prototypes. The first development checkpoint, [a4f0034](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-RyoudoTeinei/commit/a4f0034), records that boundary in CLAUDE.md and establishes curriculum checks before the course content is filled out. It also makes the starter's Git-hook installation work on Windows without changing its secret-scanning purpose.
 
-Cite the record as you go, as links whose text is the commit hash or range and
-whose target is this repo's commit or compare URL, so a reader clicks straight
-to the evidence:
+The teaching sequence moves from identifying subscriptions and commitments to platform cases, then confirmation and unresolved problems. Each lecture names observable learning outcomes and links to a workshop that produces an annotated record or explanation. The three assessments reuse those skills at weeks four, eight and twelve, with weights of 25, 30 and 45 percent. The implementation in [9079970](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-RyoudoTeinei/commit/9079970) keeps these dates and weights in the course collections so the website and catalogue API read the same records.
 
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
+Source handling became part of the teaching method. The Adobe material distinguishes US plan terms, the government's proposed settlement announcement and the company's response. Scope and verification dates sit alongside the instructions. Fictional receipts provide enough information for every required exercise, so participation does not depend on buying a service or revealing personal account details. These choices are expressed as writing rules and structured source metadata. Automated checks can establish that case lessons carry that metadata; deciding whether an explanation fairly represents a source still requires reading it.
 
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
+The lab puts the distinction between an attempt and an outcome into practice. A request deliberately times out; learners must inspect the simulated account state before receiving a completion record. Tests reject premature verification and check that resetting a case cannot leave a late timeout in the next attempt. Browser review also led to an explicit label on the pre-request result preview, so it could not be mistaken for an already completed cancellation.
 
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the point better than a sentence does.
-Commit the file to this repo and link it with a **relative** path, which is what
-makes it render on GitHub: `![alt text](docs/before.png)`. Images don't count
-towards the word count and don't replace the citation.
-
-## Before you ship
-
-`pnpm check:evidence` verifies that this comment is gone, that your citations
-resolve to real commits, that a crit week's reflection entry is in
-`reflections/`, and that your `CLAUDE.md` is there. It checks that your account
-is traceable, not that it is good: that is the marker's call.
-
-Images aren't checked: unlike a citation whose SHA doesn't resolve, a broken
-image is visible the moment this file is rendered on GitHub.
+The review in [4fd56e2](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-RyoudoTeinei/commit/4fd56e2) strengthened the practical lessons with concise action sequences. It also corrected a limitation that compilation missed: the fixed-size deck made text too small on a phone. Larger mobile typography and unscaled navigation controls made it readable without changing the supplied renderer. The final checks covered 39 built pages, twelve passing tests, internal links and the automated accessibility floor. Browser checks at 1920 by 1080 and 390 by 844 exercised navigation, search, the lab and slide readability. These checks support the artefact; they do not substitute for the student's final reading of the curriculum and this account.
