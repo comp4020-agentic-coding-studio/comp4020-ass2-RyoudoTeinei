@@ -11,3 +11,37 @@
  * slide class you reach for (`_class: quote`), a code-heavy layout, a
  * background. */
 @import url("astro-theme-university/styles/deck.css");
+
+.course-deck-nav {
+  position: fixed;
+  z-index: 60;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--at-secondary);
+  border-radius: 3px;
+  background: var(--at-dark-grey);
+  color: var(--at-white);
+  font: 13px/1.5 var(--r-main-font);
+}
+.course-deck-nav a { color: var(--at-primary); white-space: nowrap; margin-right: 12px; }
+.course-deck-nav button { background: transparent; color: var(--at-white); border: 1px solid var(--at-tertiary); min-width: 40px; min-height: 40px; font: inherit; font-size: 20px; cursor: pointer; }
+.course-deck-nav button:disabled { opacity: .35; cursor: default; }
+.course-deck-nav span { white-space: nowrap; }
+.course-deck-nav :is(a,button):focus-visible { outline: 3px solid var(--at-primary); outline-offset: 3px; }
+
+/* The supplied deck canvas is scaled from 1280px. Compensate at the marking
+   phone viewport so body text remains about 17px, without changing the
+   platform's deck renderer or its slide dimensions. */
+@media (max-width: 640px) {
+  .reveal .slides section { padding: 45px 60px; }
+  .reveal .slides section h1 { font-size: 105px; line-height: 1.12; }
+  .reveal .slides section h2 { font-size: 78px; line-height: 1.15; margin-bottom: 24px; }
+  .reveal .slides section :is(p,li) { font-size: 56px; line-height: 1.25; margin-bottom: 18px; }
+  .course-deck-nav { bottom: 28px; gap: 9px; }
+  .course-deck-nav a { margin-right: 4px; }
+}

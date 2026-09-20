@@ -1,0 +1,31 @@
+---
+import { withBase } from "astro-theme-university/url";
+---
+<nav class="course-deck-nav" data-course-deck-nav aria-label="Slide navigation">
+  <a href={withBase("/lectures/06-adobe-terms/")}>Back to lesson</a>
+  <button type="button" data-slide-prev aria-label="Previous slide">←</button>
+  <span data-slide-count aria-live="polite">1 / 9</span>
+  <button type="button" data-slide-next aria-label="Next slide">→</button>
+</nav>
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-course-deck-nav]");
+  if (nav) {
+    // Move the controls out of the scaled slide so touch targets keep their
+    // physical size. Hash navigation uses the deck's existing one-based URLs.
+    document.body.append(nav);
+    const total = document.querySelectorAll(".slides > section").length;
+    const previous = nav.querySelector<HTMLButtonElement>("[data-slide-prev]")!;
+    const next = nav.querySelector<HTMLButtonElement>("[data-slide-next]")!;
+    const counter = nav.querySelector<HTMLElement>("[data-slide-count]")!;
+    const current = () => Math.min(total, Math.max(1, Number(location.hash.match(/^#\/(\d+)/)?.[1] ?? 1)));
+    const update = () => {
+      counter.textContent = current() + " / " + total;
+      previous.disabled = current() <= 1;
+      next.disabled = current() >= total;
+    };
+    previous.addEventListener("click", () => { location.hash = "/" + Math.max(1, current() - 1); });
+    next.addEventListener("click", () => { location.hash = "/" + Math.min(total, current() + 1); });
+    window.addEventListener("hashchange", update);
+    update();
+  }
+</script>

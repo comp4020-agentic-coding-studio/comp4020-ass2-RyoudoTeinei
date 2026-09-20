@@ -25,6 +25,12 @@ A fictional viewer sees no cancellation option where they expected one. Their me
 
 Netflix's help page distinguishes its direct cancellation route from arrangements managed by a payment partner. It also explains that an ordinary paid period can have remaining access after cancellation. Account holds and balances are separate branches in that guide.
 
+## Choose the appropriate route
+
+For direct billing, open membership management, choose cancellation and complete the final confirmation. Keep the resulting email and check the access-end information.
+
+If that option is absent, inspect the account's membership section for the payment partner's instructions. Follow that provider's process. [Netflix's guide](https://help.netflix.com/en/node/407) documents both branches and special account conditions.
+
 ## Compare the two records
 
 Record A is a direct purchase. Record B is bundled through a fictional provider, Campus Connect. For each, identify the biller, the official guidance to consult and the confirmation you would request.

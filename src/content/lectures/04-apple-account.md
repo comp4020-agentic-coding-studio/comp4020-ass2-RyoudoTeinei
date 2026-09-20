@@ -25,6 +25,15 @@ The practice receipt for STAY+ names Apple as the biller and NORTH as the purcha
 
 Consult the linked Apple guide for the current device-specific route. In its iPhone instructions, subscription management sits under the account name in Settings. The receipt can help you identify which account made the purchase. Use the branch that fits the supplied evidence.
 
+## Follow the iPhone route
+
+1. Check the purchasing account against the receipt.
+2. Open Settings, select your account name, then open **Subscriptions**.
+3. Choose the specific subscription and its cancellation control.
+4. Review the resulting expiry/status information and keep a record.
+
+For other devices or a missing entry, use the appropriate branch of [Apple's guide](https://support.apple.com/en-au/118428). A carrier-billed purchase needs the carrier's route.
+
 ## Do the exercise
 
 On paper, write the account you need, the official management route, and the evidence you would inspect at the end. Then explain why opening the STAY+ website first would not resolve this particular purchase.

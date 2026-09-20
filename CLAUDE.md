@@ -17,6 +17,9 @@ STAY+ is a clearly fictional practice service, not the subject of every week.
   inventory and terms, platform cases, confirmation and problem-solving.
 - Every week needs a measurable learning outcome, an activity with supplied
   materials, and a usable output. Explain a skill before assessing it.
+- Each platform practice lesson includes a concise, scoped action sequence,
+  not only a discussion prompt. Label pre-request outcomes as proposed; only
+  verified account evidence may be presented as the completed result.
 - Assessment is inventory 25%, a sourced field guide 30%, and an unfamiliar-case
   practical 45%. All deadlines use the named Canberra teaching calendar.
 - Offer simulated data for every task; a student need not buy, cancel, or expose
